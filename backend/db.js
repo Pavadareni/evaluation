@@ -5,21 +5,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+require('dotenv').config();
 const db = mysql2.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    password: '1234',
-    database: 'employee_management',
-    port: '3306'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
 });
 
-db.connect((error) => {
-    if (error) {
-        console.log(error);
+db.connect((err) => {
+    if (err) {
+        console.error('Error connecting to the database:', err);
     } else {
-        console.log('connected');
+        console.log('Connected to the database!');
     }
 });
+
 
 app.post("/", (req, res) => {
     const { name, employeeId, email, phone, department, joiningDate, role } = req.body;
